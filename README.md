@@ -24,9 +24,9 @@ Key details of this script:
 3. Set a tag on the VMs you want to auto-start/stop.
   - Tag name: "VMAutoStartStop" (can be changed using a parameter or updating the default value in the script)
   - Tag value: `<start time>,<stop time>,<weekly schedule>` where:
-    - <start time> is a valid time format (7AM, 7:05 AM, 13:30). Can also be set to "None" to disable auto-start
-    - <stop time> is a valid time format (8PM, 8:05 AM, 1:30). Can also be set to "None" to disable auto-stop.
-    - <weekly schedule> is a string of abbreviated days ("Su","M","Tu","W","Th","F","Sa") or day ranges (M-F, Tu-Th) separated by periods. You can mix days and date ranges: M.T.Th-Sa    
+    - *start time* is a valid time format (7AM, 7:05 AM, 13:30). Can also be set to "None" to disable auto-start
+    - *stop time* is a valid time format (8PM, 8:05 AM, 1:30). Can also be set to "None" to disable auto-stop.
+    - *weekly schedule* is a string of abbreviated days ("Su","M","Tu","W","Th","F","Sa") or day ranges (M-F, Tu-Th) separated by periods. You can mix days and date ranges: M.T.Th-Sa    
 
 ## Parameters
 When executing the runbook, there are several parameters available. You can modify their default values in the script, or set the parameters in your execution/schedule.
