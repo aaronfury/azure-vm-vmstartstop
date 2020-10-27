@@ -11,12 +11,19 @@ Function Get-ScheduledAction {
         [string]$TagValue
     )
     $tagStart,$tagStop,$tagDays = $TagValue -split ","
-    $tagStart,$tagStop,$tagDays | ForEach { If ( $_ -eq $null ) { Return "Invalid Tag"}}
+    $tagStart,$tagStop,$tagDays | ForEach { If ( $_ -eq $null ) { Return "Invalid tag"}}
 
-    $tagStart = [DateTime]::Parse($tagStart)
-    $tagStop = [DateTime]::Parse($tagStop)
+    $tagStart, $tagStop | ForEach-Object {
+        If ( $_ -ne "None" ) {
+            Try {
+                $_ = [DateTime]::Parse($_)
+            } Catch {
+                Return "Invalid tag - Value $_ is not a valid format ('7AM','8:00 AM', or '13:30')"
+            }
+        }
+    }
     # If the stop time is earlier than the start time, assume the stop time is for the following day
-    If ( $tagStop -le $tagStart ) {
+    If ( (($tagStart -ne "None") -and ($tagStop -le $tagStart) ) {
         $stopTomorrow = $true
     }
 
@@ -61,7 +68,7 @@ Function Get-ScheduledAction {
     # If today is in the start days...
     If ( $CurrentDayAbbr -in $ActiveStartDays ) {
         # And the start time is in the current time chunk
-        If ( $tagStart -ge $ChunkStart -and $tagStart -le $ChunkEnd ) {
+        If ( ($tagStart -ne "None") -and ($tagStart -ge $ChunkStart) -and ($tagStart -le $ChunkEnd) ) {
             # Set the action to start
             Return "Start"
         }
@@ -69,7 +76,7 @@ Function Get-ScheduledAction {
     # If today is in the stop days...
     If ( $CurrentDayAbbr -in $ActiveStopDays ) {
         # And the stop time is in the current time chunk
-        If ( $tagStop -ge $ChunkStart -and $tagStop -le $ChunkEnd ) {
+        If ( ($tagStop -ne "None) -and ($tagStop -ge $ChunkStart) -and ($tagStop -le $ChunkEnd) ) {
             # Set the action to stop
             Return "Stop"
         }
@@ -158,8 +165,8 @@ ForEach ( $rg in $taggedResourceGroups ) {
     Write-Output "Checking Resource Group $($rg.Name) with tag value '$($rg.Tags[$TagName])'"
     # Check if the RG tag should be processed during the current chunk
     $action = Get-ScheduledAction -TagValue $rg.Tags[$TagName]
-    If ( $action -eq "Invalid tag" ) {
-        Write-Error "Could not parse tag on $($rg.Name). Skipping..."
+    If ( $action -like "Invalid tag*" ) {
+        Write-Error "Could not parse tag on $($rg.Name): $action. Skipping..."
     } ElseIf ( $action -eq "None" ) {
         Write-Output "Resource Group '$($rg.Name)' isn't scheduled for action right now. Continuing."
     } Else {
@@ -180,8 +187,8 @@ Foreach ( $vm in $taggedVMs ) {
     Write-Output "Checking VM $($vm.Name) with tag value '$($vm.Tags[$TagName])'"
     # Check if the RG tag should be processed during the current chunk
     $action = Get-ScheduledAction -TagValue $vm.Tags[$TagName]
-    If ( $action -eq "Invalid tag" ) {
-        Write-Error "Could not parse tag on $($vm.Name). Skipping..."
+    If ( $action -like "Invalid tag*" ) {
+        Write-Error "Could not parse tag on $($vm.Name): $action. Skipping..."
     } ElseIf ( $action -eq "None" ) {
         Write-Output "Resource Group '$($vm.Name)' isn't scheduled for action right now. Continuing."
     } Else {
