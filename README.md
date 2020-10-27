@@ -24,7 +24,7 @@ Key details of this script:
 3. Set a tag on the VMs you want to auto-start/stop.
   - Tag name: "VMAutoStartStop" (can be changed using a parameter or updating the default value in the script)
   - Tag value: `<start time>,<stop time>,<weekly schedule>` where:
-    - *start time* is a valid time format (7AM, 7:05 AM, 13:30). Can also be set to "None" to disable auto-start
+    - *start time* is a valid time format (7AM, 7:05 AM, 13:30). Can also be set to "None" to disable auto-start.
     - *stop time* is a valid time format (8PM, 8:05 AM, 1:30). Can also be set to "None" to disable auto-stop.
     - *weekly schedule* is a string of abbreviated days ("Su","M","Tu","W","Th","F","Sa") or day ranges (M-F, Tu-Th) separated by periods. You can mix days and date ranges: M.T.Th-Sa    
 
@@ -35,4 +35,4 @@ When executing the runbook, there are several parameters available. You can modi
 - Simulate: *boolean*. Defaults to "True". In simulate mode, the script **will not** start/stop VMs, it will simply log things to the output. This is a failsafe from the original script. You must set `-Simulate:$False` (or change the default value in the script) for the script to actually do things
 - TimeResolution: *integer*. Default is '60'. The number of minutes to use as a "run window". Basically, when the script runs, it will take the current "hour" (*e.g.*, 7AM) and divide by this number. Then it will find which "chunk" of time it is currently running in, and will only process schedules that are included in that chunk. Some examples for clarity:
   - TimeResolution = 60. The script should be scheduled every hour. The script starts at 7:01AM. The time chunk will be 7AM-7:59:59AM. The script will run start/stop commands for any scheduled time between that chunk. A VM with a start value of 7:15AM would be processed at this time.
-  - TimeResolution = 15. The script shoudl be scheduled every 15 minutes. The script starts at 7:01AM. The time chunk will be 7AM-7:14:59AM. The script will run start/stop commands for any scheduled time between that chunk. A VM with a start value of 7:15AM would not be processed. The script runs again at 7:16AM. The time chunk will be 7:15AM-7:29:59AM. A VM with a start value of 7:15AM would be processed at this time.
+  - TimeResolution = 15. The script should be scheduled every 15 minutes. The script starts at 7:01AM. The time chunk will be 7AM-7:14:59AM. The script will run start/stop commands for any scheduled time between that chunk. A VM with a start value of 7:15AM would not be processed. The script runs again at 7:16AM. The time chunk will be 7:15AM-7:29:59AM. A VM with a start value of 7:15AM would be processed at this time.
