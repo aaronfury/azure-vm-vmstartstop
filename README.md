@@ -8,7 +8,7 @@ This PowerShell script is intended to run as an Azure Automation runbook to auto
 Key details of this script:
 - Intended to run every hour, but that can be changed by setting the `$TimeResolution` parameter/variable. NOTE that Azure Automation only allows recurring schedules at a minimum of 1 hour, but you could theoretically create multiple schedules that run once an hour and "stagger" them by 10/15/30 etc. minutes.
   - Does not currently support running *less* often than one hour. This will be addressed in a future release.
-- For simplicity, this script only supports ARM VMs.
+- For simplicity, this script only supports ARM VMs and Resource Groups. Tags applied to Resource Groups will apply to all VMs in the group. An exception system may be added in a future release.
 - The script can only run against one Azure subscription at a time. This may change in a future release.
 - The script will only perform an action once, during the run window in which it is scheduled. The "adapted" script listed above would power on/off a machine each time the script ran (if the machine had been manually powered on or off after the script ran).
 - This script only supports weekly schedules. You can specify "M.W.F", "F-Su", "M.Tu-Th.Sa", or "all" for the date section of a tag. Support for specific calendar dates probably won't be added, so feel free to fork and go nuts!
