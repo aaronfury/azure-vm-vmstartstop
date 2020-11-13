@@ -238,4 +238,4 @@ Foreach ($vm in $VMStoStart){
 }
 Write-Output "VMs shutdown: $($VMstoStop.count)"
 Write-Output "VMs started: $($VMstoStart.count)"
-Write-Output "Runbook finished [Duration: $(("{0:hh\:mm\:ss}" -f ((Get-Date).ToUniversalTime() - $StartTime)))]"
+Write-Output "Runbook finished [Duration: $(("{0:hh\:mm\:ss}" -f ((Get-Date).ToUniversalTime() - $CurrentTime)))]"
