@@ -197,10 +197,18 @@ Foreach ( $vm in $taggedVMs ) {
         # Some action is to be taken, so get the VMs in the resource group
         If ( $action -eq "Start" ) {
             Write-Output "Setting $($vm.Name) to be started"
-            $VMsToStart += $vm
+            If ( $vm -in $VMsToStart ) {
+                "$vm is already included in the start list, likely due to a Resource Group tag"
+            } Else {
+                $VMsToStart += $vm
+            }
         } ElseIf ( $action -eq "Stop" ) {
             Write-Output "Setting $($vm.Name) to be stopped"
-            $VMsToStop += $vm
+            If ( $vm -in $VMsToStop ) {
+                "$vm is already included in the stop list, likely due to a Resource Group tag"
+            } Else {
+                $VMsToStop += $vm
+            }
         }
     }
 }
