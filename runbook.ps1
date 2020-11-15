@@ -155,7 +155,7 @@ If ( -not $connection ) {
     Write-Output "Connected to Azure using the Automation RunAs account"
 }
 Write-Output "Setting context to $AzureSubscriptionName"
-$context = Set-AzureRmContext -SubscriptionName $AzureSubscriptionName
+[void](Set-AzureRmContext -SubscriptionName $AzureSubscriptionName)
 # Get all resource manager VMs that have the tag
 $taggedVMs = Get-AzureRmVM | Where-Object { $_.Tags.Keys -eq $TagName | Sort-Object Name }
 # Get resource groups that have the tag
