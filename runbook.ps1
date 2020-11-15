@@ -13,15 +13,21 @@ Function Get-ScheduledAction {
     $tagStart,$tagStop,$tagDays = $TagValue -split ","
     $tagStart,$tagStop,$tagDays | ForEach { If ( $_ -eq $null ) { Return "Invalid tag"}}
 
-    $tagStart, $tagStop | ForEach-Object {
-        If ( $_ -ne "None" ) {
-            Try {
-                $_ = [DateTime]::Parse($_)
-            } Catch {
-                Return "Invalid tag - Value $_ is not a valid format ('7AM','8:00 AM', or '13:30')"
-            }
+    If ( $tagStart -ne "None" ) {
+        Try {
+            $tagStart = [DateTime]::Parse($tagStart)
+        } Catch {
+            Return "Invalid tag - Value $tagStart is not a valid format ('7AM','8:00 AM', or '13:30')"
         }
     }
+    If ( $tagStop -ne "None" ) {
+        Try {
+            $tagStop = [DateTime]::Parse($tagStop)
+        } Catch {
+            Return "Invalid tag - Value $tagStop is not a valid format ('7AM','8:00 AM', or '13:30')"
+        }
+    }
+
     # If the stop time is earlier than the start time, assume the stop time is for the following day
     If ( ($tagStart -ne "None") -and ($tagStop -le $tagStart) ) {
         $stopTomorrow = $true
@@ -70,7 +76,7 @@ Function Get-ScheduledAction {
     Write-Output "Start Days - $($ActiveStartDays -join ',')"
     Write-Output "Stop Days - $($ActiveStopDays -join ',')"
     Write-Output "Tag Start Time - $tagStart"
-    Write-Output "Tag Stop Time - $tagEnd"
+    Write-Output "Tag Stop Time - $tagStop"
     Write-Output "Window Start - $ChunkStart"
     Write-Output "Window End - $ChunkEnd"
 
